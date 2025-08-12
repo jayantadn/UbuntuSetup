@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Detect if running on WSL or native Ubuntu
+## Detect if running on WSL or native Ubuntu
 if grep -qi microsoft /proc/version; then
     ubuntu_env="wsl"
     echo "Detected WSL environment."
@@ -9,10 +9,15 @@ else
     echo "Detected native Ubuntu environment."
 fi
 
-# Common for WSL and native
+## Common for WSL and native
 
 # initial steps
 sudo apt update && sudo apt upgrade -y
+
+# git configure
+git config --global user.name "Jayanta Debnath"
+git config --global user.email Jayanta.Dn@gmail.com
+
 
 # setup command prompt
 echo "export PS1='\\[\\e[35m\\][\\A]\\[\\e[0m\\] \\[\\e[34m\\]\\W\\[\\e[0m\\] \\$ '" >> ~/.bashrc
@@ -29,35 +34,36 @@ sudo make -j$(nproc)
 sudo make altinstall
 sudo rm -rf /usr/src/Python-3.10.13
 
-# WSL specific
+## WSL specific
 if [ "$ubuntu_env" = "wsl" ]; then
     echo "Running WSL-specific setup..."
 fi
 
-# Native Ubuntu specific
+## Native Ubuntu specific
 if [ "$ubuntu_env" = "native" ]; then
     # timesync fix
     sudo timedatectl set-timezone Asia/Kolkata
 
-    # install chrome
-    mkdir -p ~/Downloads
-    wget -O ~/Downloads/google-chrome-stable_current_amd64.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-    sudo dpkg -i ~/Downloads/google-chrome-stable_current_amd64.deb
+    # set grub timeout as 3s
+    GRUB_CFG_FILE="/etc/default/grub"
+    sudo cp "$GRUB_CFG_FILE" "${GRUB_CFG_FILE}.bak.$(date +%Y%m%d%H%M%S)"
+    if grep -q "^GRUB_TIMEOUT=" "$GRUB_CFG_FILE"; then
+        sudo sed -i 's/^GRUB_TIMEOUT=.*/GRUB_TIMEOUT=3/' "$GRUB_CFG_FILE"
+    else
+        echo "GRUB_TIMEOUT=3" | sudo tee -a "$GRUB_CFG_FILE" > /dev/null
+    fi
+    sudo update-grub
+
+    # install Joplin
+    wget -O - https://raw.githubusercontent.com/laurent22/joplin/dev/Joplin_install_and_update.sh | bash
 
     # insltall vscode
-    sudo apt-get install wget gpg
-    wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
-    sudo install -D -o root -g root -m 644 microsoft.gpg /usr/share/keyrings/microsoft.gpg
-    rm -f microsoft.gpg
-    sudo tee /etc/apt/sources.list.d/vscode.sources > /dev/null <<EOF
-Types: deb
-URIs: https://packages.microsoft.com/repos/code
-Suites: stable
-Components: main
-Architectures: amd64,arm64,armhf
-Signed-By: /usr/share/keyrings/microsoft.gpg
-EOF
-    sudo apt install apt-transport-https
+    sudo apt install -y wget gpg apt-transport-https software-properties-common
+    wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/packages.microsoft.gpg
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/packages.microsoft.gpg] \
+    https://packages.microsoft.com/repos/code stable main" \
+    | sudo tee /etc/apt/sources.list.d/vscode.list > /dev/null
     sudo apt update
-    sudo apt install code # or code-insiders
+    sudo apt install -y code
+
 fi
