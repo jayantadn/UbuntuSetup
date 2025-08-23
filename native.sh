@@ -27,3 +27,6 @@ sudo apt install -y code
 
 # detect android phone
 sudo apt install android-tools-adb android-tools-fastboot
+
+# media player
+sudo apt install -y vlc
