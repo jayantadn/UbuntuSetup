@@ -52,3 +52,9 @@ yes | sdkmanager --sdk_root="$SDK_DIR" --licenses
 $HOME/Tools/android-sdk/cmdline-tools/cmdline-tools/bin/sdkmanager --sdk_root="$SDK_DIR" "platform-tools" "platforms;android-34" "build-tools;34.0.0"
 flutter doctor --android-licenses
 
+# install node and firebase cli
+sudo apt install -y curl software-properties-common
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo bash -
+sudo apt install -y nodejs
+sudo npm install -g firebase-tools
+dart pub global activate flutterfire_cli
