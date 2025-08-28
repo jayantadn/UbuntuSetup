@@ -58,3 +58,9 @@ curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo bash -
 sudo apt install -y nodejs
 sudo npm install -g firebase-tools
 dart pub global activate flutterfire_cli
+
+# install google chrome
+sudo apt install -y wget curl apt-transport-https gnupg
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -O /tmp/google-chrome-stable_current_amd64.deb
+sudo apt install -y /tmp/google-chrome-stable_current_amd64.deb
+rm /tmp/google-chrome-stable_current_amd64.deb
