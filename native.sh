@@ -71,3 +71,6 @@ sudo apt-get update -y
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 sudo groupadd docker || true
 sudo usermod -aG docker $USER
+
+# kdiff3
+sudo apt install -y kdiff3 dolphin-plugins
