@@ -1,5 +1,8 @@
 #!/bin/bash
 
+## Store the current directory at the beginning
+ROOTDIR="$(pwd)"
+
 ## Detect if running on WSL or native Ubuntu
 if grep -qi microsoft /proc/version; then
     ubuntu_env="wsl"
@@ -10,14 +13,17 @@ else
 fi
 
 ## Common for WSL and native
-source common.sh
+cd "$ROOTDIR" || exit
+source "$ROOTDIR/common.sh"
 
 ## WSL specific
 if [ "$ubuntu_env" = "wsl" ]; then
-    source wsl.sh
+    cd "$ROOTDIR" || exit
+    source "$ROOTDIR/wsl.sh"
 fi
 
 ## Native Ubuntu specific
 if [ "$ubuntu_env" = "native" ]; then
-    source native.sh
+    cd "$ROOTDIR" || exit
+    source "$ROOTDIR/native.sh"
 fi
