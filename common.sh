@@ -64,3 +64,10 @@ sudo apt install -y wget curl apt-transport-https gnupg
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -O /tmp/google-chrome-stable_current_amd64.deb
 sudo apt install -y /tmp/google-chrome-stable_current_amd64.deb
 rm /tmp/google-chrome-stable_current_amd64.deb
+
+# install qemu
+sudo apt install -y qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virtinst virt-manager
+sudo usermod -aG libvirt $USER
+sudo usermod -aG kvm $USER
+sudo systemctl enable --now libvirtd
+
