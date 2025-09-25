@@ -13,17 +13,22 @@ echo "export PATH=$PATH:$HOME/Tools/flutter/bin" >> ~/.bashrc
 # setup command prompt
 echo "export PS1='\\[\\e[35m\\][\\A]\\[\\e[0m\\] \\[\\e[34m\\]\\W\\[\\e[0m\\] \\$ '" >> ~/.bashrc
 
-# install python 3.10
-sudo apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+# install python
+PYTHON_VERSION=3.10.13
+sudo apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
+libreadline-dev libsqlite3-dev wget curl llvm libncursesw5-dev xz-utils \
+tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 cd /usr/src
-sudo wget https://www.python.org/ftp/python/3.10.13/Python-3.10.13.tgz
-sudo tar xvf Python-3.10.13.tgz
-sudo rm Python-3.10.13.tgz
-cd Python-3.10.13
+sudo wget https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz
+sudo tar xvf Python-${PYTHON_VERSION}.tgz
+sudo rm Python-${PYTHON_VERSION}.tgz
+cd Python-${PYTHON_VERSION}
 sudo ./configure --enable-optimizations
-sudo make -j$(nproc)
+sudo make -j"$(nproc)"
 sudo make altinstall
-sudo rm -rf /usr/src/Python-3.10.13
+cd /usr/src
+sudo rm -rf Python-${PYTHON_VERSION}
+
 
 # install android sdk
 SDK_DIR="$HOME/Tools/android-sdk"
