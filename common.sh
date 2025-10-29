@@ -77,3 +77,6 @@ sudo usermod -aG libvirt $USER
 sudo usermod -aG kvm $USER
 sudo systemctl enable --now libvirtd
 
+# clone the Scripts repo
+git clone https://github.com/jayantadn/Scripts.git "$HOME/Tools/Scripts"
+
