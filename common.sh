@@ -84,3 +84,5 @@ source $HOME/Tools/Scripts/.venv/bin/activate
 pip install -r $HOME/Tools/Scripts/requirements.txt
 deactivate
 
+# install other common tools
+sudo apt install -y vim
