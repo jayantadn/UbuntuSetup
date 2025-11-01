@@ -13,9 +13,6 @@ else
 fi
 sudo update-grub
 
-# install Joplin
-wget -O - https://raw.githubusercontent.com/laurent22/joplin/dev/Joplin_install_and_update.sh | bash
-
 # insltall vscode
 sudo apt install -y wget gpg apt-transport-https software-properties-common
 wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/packages.microsoft.gpg
@@ -26,7 +23,7 @@ sudo apt update
 sudo apt install -y code
 
 # detect android phone
-sudo apt install android-tools-adb android-tools-fastboot
+sudo apt install -y android-tools-adb android-tools-fastboot
 
 # media player
 sudo apt install -y vlc
