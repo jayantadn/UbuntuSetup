@@ -78,10 +78,11 @@ sudo usermod -aG kvm $USER
 sudo systemctl enable --now libvirtd
 
 # clone the Scripts repo
-git clone https://github.com/jayantadn/Scripts.git "$HOME/Tools/Scripts"
-python3.10 -m venv $HOME/Tools/Scripts/.venv
-source $HOME/Tools/Scripts/.venv/bin/activate
-pip install -r $HOME/Tools/Scripts/requirements.txt
+mkdir $HOME/GitRepos
+git clone https://github.com/jayantadn/Scripts.git "$HOME/GitRepos/Scripts"
+python3.10 -m venv $HOME/GitRepos/Scripts/.venv
+source $HOME/GitRepos/Scripts/.venv/bin/activate
+pip install -r $HOME/GitRepos/Scripts/requirements.txt
 deactivate
 
 # install other common tools
