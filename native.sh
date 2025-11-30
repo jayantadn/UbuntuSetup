@@ -47,5 +47,45 @@ sudo usermod -aG docker $USER
 # kdiff3
 sudo apt install -y kdiff3 dolphin-plugins
 
+# input remapper - for mouse button customization
+REPO="sezanzeb/input-remapper"
+WORKDIR="$(mktemp -d)"
+cd "$WORKDIR"
+for cmd in curl jq; do
+  if ! command -v $cmd >/dev/null 2>&1; then
+    echo "Installing missing dependency: $cmd"
+    sudo apt update
+    sudo apt install -y "$cmd"
+  fi
+done
+echo "Fetching latest release info for $REPO..."
+release_json=$(curl -s "https://api.github.com/repos/${REPO}/releases/latest")
+asset_url=$(echo "$release_json" | jq -r '.assets[] | select(.name | test("\\.deb$")) | .browser_download_url' | head -n1)
+if [ -z "$asset_url" ] || [ "$asset_url" = "null" ]; then
+  echo "No .deb asset found in latest release. Abort."
+  exit 1
+fi
+debname="$(basename "$asset_url")"
+echo "Downloading asset: $debname"
+curl -L -o "$debname" "$asset_url"
+echo "Installing $debname (may ask for sudo)..."
+if sudo apt install -y "./$debname"; then
+  echo "Package installed successfully via apt."
+else
+  echo "apt install failed; trying to fix dependencies..."
+  sudo apt install -f -y
+  sudo dpkg -i "./$debname" || { echo "dpkg failed"; exit 2; }
+fi
+if systemctl list-unit-files --type=service 2>/dev/null | grep -q '^input-remapper'; then
+  echo "Enabling and starting input-remapper service..."
+  sudo systemctl enable --now input-remapper.service || echo "Could not enable/start input-remapper.service — check logs."
+else
+  echo "No input-remapper service unit found (or systemd not present)."
+fi
+echo "Cleaning up $WORKDIR"
+rm -rf "$WORKDIR"
+echo "Done. Run 'input-remapper-gtk' or 'input-remapper-control --version' to verify."
+
+
 # other packages
 sudo apt install -y libreoffice
