@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+echo "Hint: During configuration use the name GoogleDrive, which is entry number 18"
+
 # === SETTINGS ===
 MOUNT_POINT="/media/GoogleDrive"
 RCLONE_REMOTE_NAME="GoogleDrive"
