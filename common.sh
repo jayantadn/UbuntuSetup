@@ -9,10 +9,14 @@ git config --global user.email Jayanta.Dn@gmail.com
 
 # add path
 cp ~/.bashrc ~/.bashrc.orig
-echo "export PATH=\$PATH:\$HOME/Tools/flutter/bin" >> ~/.bashrc
+if ! grep -q "export PATH=.*\$HOME/Tools/flutter/bin" ~/.bashrc; then
+    echo "export PATH=\$PATH:\$HOME/Tools/flutter/bin" >> ~/.bashrc
+fi
 
 # setup command prompt
-echo "export PS1='\\[\\e[35m\\][\\A]\\[\\e[0m\\] \\[\\e[34m\\]\\W\\[\\e[0m\\] \\$ '" >> ~/.bashrc
+if ! grep -q "export PS1=" ~/.bashrc; then
+    echo "export PS1='\\[\\e[35m\\][\\A]\\[\\e[0m\\] \\[\\e[34m\\]\\W\\[\\e[0m\\] \\$ '" >> ~/.bashrc
+fi
 
 # install python
 PYTHON_VERSION=3.10.13
@@ -49,6 +53,8 @@ if ! grep -q "ANDROID_HOME" "$HOME/.bashrc"; then
 export ANDROID_HOME="$SDK_DIR"
 export PATH="\$ANDROID_HOME/cmdline-tools/latest/bin:\$ANDROID_HOME/platform-tools:\$PATH"
 EOF
+else
+    echo "[*] Android environment variables already exist in ~/.bashrc"
 fi
 rm -rf "$ANDROID_HOME/cmdline-tools/latest"
 mv "$ANDROID_HOME/cmdline-tools/cmdline-tools" "$ANDROID_HOME/cmdline-tools/latest"
