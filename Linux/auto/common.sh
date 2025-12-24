@@ -136,13 +136,20 @@ sudo usermod -aG kvm $USER
 sudo systemctl enable --now libvirtd
 
 ####################################################
-# clone the Scripts repo
+# setup Scripts from OsSetup repo
 ####################################################
-mkdir $HOME/GitRepos
-git clone https://github.com/jayantadn/Scripts.git "$HOME/GitRepos/Scripts"
-python3.10 -m venv $HOME/GitRepos/Scripts/.venv
-source $HOME/GitRepos/Scripts/.venv/bin/activate
-pip install -r $HOME/GitRepos/Scripts/requirements.txt
+mkdir -p $HOME/GitRepos
+if [ ! -d "$HOME/GitRepos/OsSetup" ]; then
+    echo "[*] Cloning OsSetup repo..."
+    git clone https://github.com/jayantadn/OsSetup.git "$HOME/GitRepos/OsSetup"
+else
+    echo "[*] OsSetup repo already exists at $HOME/GitRepos/OsSetup"
+fi
+
+SCRIPTS_DIR="$HOME/GitRepos/OsSetup/Scripts"
+python3.10 -m venv $SCRIPTS_DIR/.venv
+source $SCRIPTS_DIR/.venv/bin/activate
+pip install -r $SCRIPTS_DIR/requirements.txt
 deactivate
 
 ####################################################
